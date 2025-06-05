@@ -20,9 +20,28 @@ namespace RentCar.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string CarType,string SearchString)
         {
-            return View(await _context.Car.ToListAsync());
+            var Cars=_context.Car.AsQueryable();
+
+            var Types = _context.Car.Select(s => s.TransmissionType).AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                Cars=Cars.Where(s=>s.CarModel!.ToLower().Contains(SearchString.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(CarType))
+            {
+                Cars = Cars.Where(s => s.TransmissionType!.ToLower().Equals(CarType.ToLower()));
+            }
+
+            var CarTypeVM = new CarTransmissionTypeViewModel
+            {
+                Type = new SelectList(await Types.Distinct().ToListAsync()),
+                Cars = await Cars.ToListAsync(),
+            };
+
+            return View(CarTypeVM);
         }
 
         // GET: Cars/Details/5

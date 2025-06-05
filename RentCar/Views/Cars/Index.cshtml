@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentCar.Models.Car>
+﻿@model RentCar.Models.CarTransmissionTypeViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,26 +9,37 @@
 <p>
     <a asp-action="Create">Создать новый</a>
 </p>
+<form asp-controller="Cars" asp-action="Index" method="get">
+    <p>
+
+        <select asp-for="CarType" asp-items="Model.Type">
+            <option value="">All</option>
+        </select>
+
+        <label>Title: <input type="text" asp-for="SearchString" /></label>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CarModel)
+                @Html.DisplayNameFor(model => model.Cars![0].CarModel)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
+                @Html.DisplayNameFor(model => model.Cars![0].ReleaseDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TransmissionType)
+                @Html.DisplayNameFor(model => model.Cars![0].TransmissionType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RentalPrice)
+                @Html.DisplayNameFor(model => model.Cars![0].RentalPrice)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Cars!) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.CarModel)
